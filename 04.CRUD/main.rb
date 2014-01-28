@@ -4,37 +4,42 @@ require 'sqlite3'
 db_path = "db/cookbook.sqlite"
 db = SQLite3::Database.new(db_path)
 
-# creates the schema of the database
-# your code here
 sql = %q{
-  
+  CREATE TABLE Recipe 
+  (
+  	Id integer primary key autoincrement,
+  	Name varchar(255), 
+  	Description varchar(255), 
+  	Length int, 
+  	Difficulty int
+  	)
 }
-db.execute(sql)
+# db.execute(sql)
 
 #*************************************
 
 # function to create a recipe
 def create_recipe(db,name,description,length,difficulty)
-  # your code here
+  db.execute("INSERT INTO Recipe (Name, Description, Length, Difficulty) VALUES ('#{name}', '#{description}', {length}, #{difficulty})")
 end
 
 # function to delete a recipe
 def delete_recipe(db,id)
-  # your code here
+	db.execute("DELETE FROM Recipe.Name VALUE (#{name})")
 end
 
 # function to delete all recipes
 def delete_all_recipes(db)
-  # your code here
+  db.execute("DELETE FROM Recipe")
 end
 
 # function to update a recipe
 def update_recipe(db,id,description)
-  # your code here
+  db.execute("UPDATE Recipe SET Description=#{description} WHERE Id=#{id}")
 end
 
 def get_recipes(db)
-  # function to get all recipes
+  db.execute("SELECT * FROM Recipe").each {|row| puts row}
 end
 
 
@@ -50,14 +55,23 @@ puts "3. read your recipes"
 choice =  gets.chomp.to_i
 
 if choice == 1
-  # your code here to create a recipe
-  # you need to ask for name, description, length and difficulty
+                puts "What is the name of the recipe?"
+                name = gets.chomp
+                puts "What is the description?"
+                description = gets.chomp
+                puts "What is the cooking time (in minutes)?"
+                length = gets.chomp.to_i
+                puts "What is the difficulty (on a scale of 3)?"
+                difficulty = gets.chomp.to_i
+                create_recipe(db, name, description, length, difficulty)
+                puts "Added!"
   
 elsif choice == 2
-  # your code here to delete all recipes
+  delete_all_recipes(db)
+  puts "You deleted all your recipes."
   
 elsif choice == 3
-  # your code here to read all recipes
+  puts get_recipes(db)
 end 
   
   
